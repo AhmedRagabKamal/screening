@@ -1,0 +1,97 @@
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div jarvis-widget id="ScreenView-widget" data-widget-color="darken" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon">
+                            <i class="fa fa-table"></i>
+                        </span>
+                        <h2>Screening List </h2>
+                    </header>
+                    <div class="server-side-dt">
+                        <div class="widget-body table-responsive nestedTable">
+                            <table class="table table-striped table-bordered table-hover width-50-px table-fixed-width" width="100%">
+                                <thead>
+                                <th>Screening Type</th>
+                                <th>PSP Verbal Consent</th>
+                                <th>PSP Verbal Consent Date</th>
+                                <th>PSP Written Consent</th>
+                                <th>PSP Written  Date</th>
+                                <th>PSP Status</th>
+                                <th>Screening Outcome Category</th>
+                                <th>Screening Test Code</th>
+                                <th>Screening Test Result</th>
+                                <th>Screening Date</th>
+                                <th>Insurance Company</th>
+                                <th>Insurance Unique ID</th>
+                                <th>TPA</th>
+                                <th class="text-center" colspan="2">Actions</th>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="screeningData in listScreeningData track by $index">
+                                    <td>{{ screeningData.screen_type }}</td>
+                                    <td>{{ screeningData.verbal_consent == 1 ? "Yes" : "No" }}</td>
+                                    <td>{{ screeningData.verbal_consent ? (screeningData.verbal_consent_at  | toLocalTime | amDateFormat:'DD-MM-YYYY') : 'N/A' }}</td>
+                                    <td>{{ screeningData.written_consent == 1 ? "Yes": "No" }}</td>
+                                    <td>{{ screeningData.written_consent == 1 ? (screeningData.written_consent_at | toLocalTime | amDateFormat:'DD-MM-YYYY') : 'N/A' }}</td>
+                                    <td>{{ screeningData.psp_status_text }}</td>
+                                    <td colspan="8" class="padding-0" style="padding: 0 !important;">
+                                        <table class="table table-striped table-bordered border-0 table-hover test_code_table table-fixed-width">
+                                            <tbody>
+                                            <tr ng-repeat="test in screeningData.tests track by $index">
+                                                <td>{{test.category}}</td>
+                                                <td>{{test.screen_test_code}}
+                                                </td>
+                                                <td>{{ test.test_outcome_text }}</td>
+                                                <td>{{ test.screening_at | toLocalTime | amDateFormat:'DD-MM-YYYY' }}</td>
+                                                <td>{{ test.insurance_company }}
+                                                </td>
+                                                <td>{{ test.insurance_code }}</td>
+                                                <td>{{ test.tpa }}</td>
+                                                <td>
+                                                    <a  ng-click="getTestLogFromList(test.id)" class="btn btn-default btn-xs" ng-roles='doctor,agent,nurse' title="Audit Trail - Screening Test">
+                                                        <i class="fa fa-book"></i>
+                                                    </a>
+                                                    <a ng-disabled="!canAddScreen" ng-click="updateTest(test,screeningData);" ng-roles='doctor,agent,nurse' class="btn btn-default btn-xs" title="Update Test">
+                                                        <i class="fa fa-pencil-square-o"></i>
+                                                    </a>
+                                                    <a ng-disabled="!canAddScreen" ng-click="uploadDocumentFromList(test.id);" class="btn btn-default btn-xs" title="Upload File">
+                                                        <i class="fa fa-upload"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td>
+
+                                        <a ng-click="editScreening(screeningData.id);" ng-roles='doctor,agent,nurse' class="btn btn-default btn-xs" title="Update Screening">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+
+                                        <a ng-disabled="!canAddScreen" ng-click="showAddTestCodeModal(screeningData);" ng-roles='doctor,agent,nurse' class="btn btn-default btn-xs" title="Add Test">
+                                            <i class="fa fa-plus-square"></i>
+                                         </a>
+                                        <a ng-click="changePSPStatus(screeningData)"  ng-roles='doctor,agent,nurse' class="btn btn-default btn-xs" title="Change PSP Status">
+                                            <i class="fa fa-refresh"></i>
+                                        </a>
+                                        <a ng-disabled="!canAddScreen" ng-click="setRemark(screeningData.id)" class="btn btn-default btn-xs" title="Add Remark">
+                                            <i class="fa fa-commenting-o"></i>
+                                        </a>
+                                        <a ng-click="getRemark(screeningData.id)" class="btn btn-default btn-xs" title="View Remarks">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <a ng-click="getLogs(screeningData.id)" class="btn btn-default btn-xs" title="Audit Trail - Screening">
+                                            <i class="fa fa-archive"></i>
+                                        </a>
+                                        <a ng-click="getUploadDocuments(screeningData.id)" class="btn btn-default btn-xs" title="Uploaded Files">
+                                            <i class="fa fa-folder-open"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
